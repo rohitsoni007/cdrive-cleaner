@@ -1,0 +1,66 @@
+{
+  "uvPath": "%LOCALAPPDATA%\\uv",
+
+  "contentClean": [
+    "%TEMP%",
+    "%LOCALAPPDATA%\\Temp",
+    "%LOCALAPPDATA%\\CrashDumps",
+    "%LOCALAPPDATA%\\D3DSCache",
+    "%LOCALAPPDATA%\\Microsoft\\Windows\\INetCache",
+    "%LOCALAPPDATA%\\Microsoft\\Windows\\WER",
+
+    "%SystemRoot%\\Temp",
+    "%SystemRoot%\\Prefetch",
+    "%SystemRoot%\\SoftwareDistribution\\Download",
+    "%SystemRoot%\\Logs",
+    "%SystemRoot%\\Minidump",
+    "%SystemRoot%\\LiveKernelReports",
+
+    "C:\\PerfLogs"
+  ],
+
+  "fullRemove": [
+    "%USERPROFILE%\\.cache",
+    "%USERPROFILE%\\.npm",
+    "%USERPROFILE%\\.pnpm-store",
+    "%USERPROFILE%\\.gradle",
+    "%USERPROFILE%\\.antigravity",
+    "%USERPROFILE%\\.claude",
+    "%USERPROFILE%\\.config",
+    "%USERPROFILE%\\.crossnote",
+    "%USERPROFILE%\\.gemini",
+    "%USERPROFILE%\\.qoder",
+
+    "%LOCALAPPDATA%\\cache",
+    "%LOCALAPPDATA%\\Qoder",
+    "%LOCALAPPDATA%\\antigravity",
+    "%LOCALAPPDATA%\\npm-cache",
+    "%LOCALAPPDATA%\\pnpm-cache",
+    "%LOCALAPPDATA%\\pnpm-state",
+    "%LOCALAPPDATA%\\pip\\cache",
+    "%LOCALAPPDATA%\\Yarn\\Cache",
+    "%LOCALAPPDATA%\\ms-playwright-go",
+    "%LOCALAPPDATA%\\FLiNGTrainer",
+    "%LOCALAPPDATA%\\ImageViewer",
+    "%LOCALAPPDATA%\\Package Cache",
+    "%LOCALAPPDATA%\\setup",
+    "%LOCALAPPDATA%\\SquirrelTemp",
+    "%LOCALAPPDATA%\\UnrealEngine",
+    "%LOCALAPPDATA%\\UnrealEngineLauncher",
+    "%LOCALAPPDATA%\\Epic Games",
+    "%LOCALAPPDATA%\\EpicGamesLauncher",
+
+    "%APPDATA%\\Qoder",
+    "%APPDATA%\\antigravity",
+    "%APPDATA%\\Docker",
+    "%APPDATA%\\dgVoodoo",
+    "%APPDATA%\\DMCache",
+    "%APPDATA%\\dvdcss",
+    "%APPDATA%\\GameSave Manager",
+    "%APPDATA%\\GSM Backups",
+    "%APPDATA%\\NVIDIA",
+    "%APPDATA%\\Naughty Dog",
+
+    "%ProgramData%\\Naughty Dog"
+  ]
+}
