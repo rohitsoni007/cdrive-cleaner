@@ -15,37 +15,22 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm install handlebars
+      - run: npm install handlebars
 
       - name: Generate BAT files
-        run: node src/index.js
-
-      - name: Ensure bin folder exists
-        run: mkdir -p bin
-
-      - name: Commit generated files
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add bin/
-          git commit -m "Release v${{ github.event.inputs.version }}" || echo "No changes to commit"
-          git tag v${{ github.event.inputs.version }}
-          git push
-          git push origin v${{ github.event.inputs.version }}
+          mkdir -p bin
+          node src/index.js
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
