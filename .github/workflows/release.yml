@@ -32,15 +32,10 @@ jobs:
         run: npm install handlebars
 
       - name: Generate BAT files
-        run: node generate.js
+        run: node src/index.js
 
       - name: Ensure bin folder exists
         run: mkdir -p bin
-
-      - name: Move generated files to bin
-        run: |
-          mv ultra-clean-fast.bat bin/
-          mv ultra-clean-pro.bat bin/
 
       - name: Commit generated files
         run: |
