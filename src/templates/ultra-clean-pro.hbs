@@ -1,0 +1,110 @@
+@echo off
+title Ultra Deep Clean Utility (PRO MODE)
+color 0A
+setlocal EnableDelayedExpansion
+
+echo ==============================================
+echo        Ultra Deep Clean Utility (PRO)
+echo ==============================================
+echo User: %USERNAME%
+echo ==============================================
+pause
+
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Please run as Administrator.
+    pause
+    exit /b
+)
+
+set /a TOTAL_FREED=0
+
+net stop wuauserv >nul 2>&1
+net stop bits >nul 2>&1
+
+echo Starting PRO cleanup...
+echo.
+
+:: ==========================================
+:: CONTENT CLEAN WITH SIZE COUNT
+:: ==========================================
+for %%F in (
+{{#each contentClean}}
+"{{this}}"
+{{/each}}
+) do (
+    if exist "%%F" (
+
+        for /f %%A in ('powershell -NoProfile -Command ^
+        "if (Test-Path \"%%F\") { (Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue \"%%F\" | Measure-Object Length -Sum).Sum } else { 0 }"') do set SIZE=%%A
+
+        if not defined SIZE set SIZE=0
+        set /a FREED=!SIZE!/1024/1024
+
+        echo Cleaning contents: %%F  ^(Approx !FREED! MB^)
+
+        del /f /s /q "%%F\*" >nul 2>&1
+        for /d %%D in ("%%F\*") do rd /s /q "%%D" >nul 2>&1
+
+        set /a TOTAL_FREED+=!FREED!
+    )
+)
+
+:: ==========================================
+:: UV SPECIAL (FAST MOVE + SIZE COUNT)
+:: ==========================================
+echo.
+echo Handling UV cache...
+taskkill /f /im uv.exe >nul 2>&1
+timeout /t 1 >nul
+
+if exist "{{uvPath}}" (
+
+    for /f %%A in ('powershell -NoProfile -Command ^
+    "if (Test-Path \"{{uvPath}}\") { (Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue \"{{uvPath}}\" | Measure-Object Length -Sum).Sum } else { 0 }"') do set SIZE=%%A
+
+    if not defined SIZE set SIZE=0
+    set /a FREED=!SIZE!/1024/1024
+
+    echo Cleaning UV: {{uvPath}}  ^(Approx !FREED! MB^)
+
+    move "{{uvPath}}" "%TEMP%\uv_delete_%RANDOM%" >nul 2>&1
+    rd /s /q "%TEMP%\uv_delete_%RANDOM%" >nul 2>&1
+
+    set /a TOTAL_FREED+=!FREED!
+)
+
+:: ==========================================
+:: FULL REMOVE WITH SIZE COUNT
+:: ==========================================
+for %%F in (
+{{#each fullRemove}}
+"{{this}}"
+{{/each}}
+) do (
+    if exist "%%F" (
+
+        for /f %%A in ('powershell -NoProfile -Command ^
+        "if (Test-Path \"%%F\") { (Get-ChildItem -Recurse -Force -ErrorAction SilentlyContinue \"%%F\" | Measure-Object Length -Sum).Sum } else { 0 }"') do set SIZE=%%A
+
+        if not defined SIZE set SIZE=0
+        set /a FREED=!SIZE!/1024/1024
+
+        echo Removing: %%F  ^(Approx !FREED! MB^)
+
+        rd /s /q "%%F" >nul 2>&1
+
+        set /a TOTAL_FREED+=!FREED!
+    )
+)
+
+net start wuauserv >nul 2>&1
+net start bits >nul 2>&1
+
+echo.
+echo ==============================================
+echo PRO CLEANUP COMPLETED
+echo Total Space Freed: !TOTAL_FREED! MB
+echo ==============================================
+pause
+exit /b

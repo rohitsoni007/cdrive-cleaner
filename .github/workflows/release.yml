@@ -1,0 +1,63 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (example: 1.1.0)"
+        required: true
+        type: string
+      release_notes:
+        description: "Release notes (optional)"
+        required: false
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install handlebars
+
+      - name: Generate BAT files
+        run: node generate.js
+
+      - name: Ensure bin folder exists
+        run: mkdir -p bin
+
+      - name: Move generated files to bin
+        run: |
+          mv ultra-clean-fast.bat bin/
+          mv ultra-clean-pro.bat bin/
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add bin/
+          git commit -m "Release v${{ github.event.inputs.version }}" || echo "No changes to commit"
+          git tag v${{ github.event.inputs.version }}
+          git push
+          git push origin v${{ github.event.inputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: v${{ github.event.inputs.version }}
+          body: ${{ github.event.inputs.release_notes }}
+          files: bin/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

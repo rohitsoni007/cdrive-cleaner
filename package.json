@@ -1,0 +1,23 @@
+{
+  "name": "cdrive-cleaner",
+  "version": "1.0.0",
+  "description": "High-performance Windows cleanup utilities for developers and power users.",
+  "homepage": "https://github.com/rohitsoni007/cdrive-cleaner#readme",
+  "bugs": {
+    "url": "https://github.com/rohitsoni007/cdrive-cleaner/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohitsoni007/cdrive-cleaner.git"
+  },
+  "license": "MIT",
+  "author": "Rohit Soni",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
